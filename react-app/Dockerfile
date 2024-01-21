@@ -1,31 +1,24 @@
 # syntax=docker/dockerfile:1
 
 ARG NODE_VERSION=20.11.0
-FROM node:$NODE_VERSION-alpine
+ARG NGINX_VERSION=1.25.3
 
-# React app lives here
+FROM node:$NODE_VERSION-alpine AS base
 WORKDIR /app
-
-# Set environment variables
-ENV MESSAGE="Hello Docker!"
-
-# Install application packages
 COPY package*.json .
 RUN npm install
-
-# Copy application code
 COPY . .
 
-# Add a non-root user and then run and own only
-# the runtime files as a non-root user for security
-RUN addgroup app && \
-  adduser -S -G app app && \
-  mkdir node_modules/.cache && \
-  chown app:app node_modules/.cache
-
-# Switch to a non-root user
-USER app
-
-# Start the server by default, this can be overwritten at runtime
+# Use this stage in compose file for development environment
+FROM base AS development
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD [ "npm", "start" ]
+
+FROM base AS production-build
+RUN npm run build
+
+# Use this stage in compose file for production environment
+FROM nginxinc/nginx-unprivileged:$NGINX_VERSION-alpine AS production
+COPY --from=production-build /app/build /usr/share/nginx/html
+EXPOSE 8080
+ENTRYPOINT [ "nginx", "-g", "daemon off;" ]

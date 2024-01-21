@@ -1,6 +1,9 @@
 services:
   server:
-    build: .
+    build:
+      context: .
+      target: development
+    image: react-app-server:development
     ports:
       - 3000:3000
     develop:

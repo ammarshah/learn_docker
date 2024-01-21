@@ -1,0 +1,14 @@
+services:
+  server:
+    build:
+      context: .
+      target: production
+    image: react-app-server:production
+    ports:
+      - 8080:8080
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
