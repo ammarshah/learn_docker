@@ -25,7 +25,7 @@ Then clone the repository and run the project in a Docker container using:
 ```shell
 $ git clone git@github.com:ammarshah/learn_docker.git
 $ cd learn_docker/react-app
-$ docker compose up
+$ docker compose -f compose.dev.yml up
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
@@ -35,7 +35,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 For development purposes, you can run the project in a [`watch`](https://docs.docker.com/compose/file-watch/) mode:
 
 ```shell
-$ docker compose watch
+$ docker compose -f compose.dev.yml watch
 ```
 
 To login to the container's shell:
@@ -47,10 +47,10 @@ $ docker exec -it react-app-server-1 sh
 Finally, to stop the container use:
 
 ```shell
-$ docker compose down
+$ docker compose -f compose.dev.yml down
 
 # If you want Docker to automatically remove the container, image and network use:
-$ docker compose down --rmi local
+$ docker compose -f compose.dev.yml down --rmi local
 ```
 
 ## Production Deployment
