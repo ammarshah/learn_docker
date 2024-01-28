@@ -1,0 +1,30 @@
+services:
+  web:
+    depends_on: 
+      - api
+    build:
+      context: ./web
+      target: development
+    image: vidly-web:development
+    ports:
+      - 3000:3000
+  api:
+    depends_on: 
+      - db
+    build:
+      context: ./api
+      target: development
+    image: vidly-api:development
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
+  db:
+    image: mongo:6.0.13-jammy
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+
+volumes:
+  vidly:
