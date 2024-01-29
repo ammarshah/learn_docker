@@ -1,0 +1,41 @@
+x-deploy: &deploy
+  deploy:
+    restart_policy:
+      condition: on-failure
+      delay: 5s
+      max_attempts: 3
+      window: 120s
+
+services:
+  web:
+    depends_on: 
+      - api
+    build:
+      context: ./web
+      target: production
+    image: vidly-web:production
+    ports:
+      - 8080:8080
+    <<: *deploy
+  api:
+    depends_on: 
+      - db
+    build:
+      context: ./api
+      target: production
+    image: vidly-api:production
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: mongodb://db/vidly
+    <<: *deploy
+  db:
+    image: mongo:6.0.13-jammy
+    ports:
+      - 27017:27017
+    volumes:
+      - vidly:/data/db
+    <<: *deploy
+
+volumes:
+  vidly:
