@@ -86,7 +86,7 @@ $ docker push ammarshah/react-app:latest
 d. Finally, login to your production server via ssh and run the recent version of your production build/image on the server:
 
 ```shell
-$ docker run -d -p 8080:8080 --name react-app-server-1 ammarshah/react-app:1.0.0
+$ docker run -d -p 80:8080 --name react-app-server-1 ammarshah/react-app:1.0.0
 ```
 
 Note: The drawback with this option is that you can't get the benefit of the single `docker compose` command, meaning you will have to repeat more steps on every deployment but it will be quicker since the images are pre-built and ready to run.
@@ -113,4 +113,4 @@ $ docker compose -f compose.prod.yml up -d
 
 Note: The drawback with this option is that you can't get the benefit of pre-built images, so it will be slower but fewer steps to follow on every deployment.
 
-The application is accessible at [http://your-server-ip:8080](http://your-server-ip:8080) using either option.
+The application is accessible at [http://your-server-ip](http://your-server-ip) using either option.

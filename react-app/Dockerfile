@@ -9,7 +9,7 @@ COPY package*.json .
 RUN npm install
 COPY . .
 
-# Use this stage in compose file for development environment
+# Use this stage in compose file for development build
 FROM base AS development
 EXPOSE 3000
 CMD [ "npm", "start" ]
@@ -17,7 +17,7 @@ CMD [ "npm", "start" ]
 FROM base AS production-build
 RUN npm run build
 
-# Use this stage in compose file for production environment
+# Use this stage in compose file for production build
 FROM nginxinc/nginx-unprivileged:$NGINX_VERSION-alpine AS production
 COPY --from=production-build /app/build /usr/share/nginx/html
 EXPOSE 8080
