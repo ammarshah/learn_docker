@@ -13,22 +13,24 @@ services:
     build:
       context: ./web
       target: production
-    image: vidly-web:production
+    image: ammarshah/vidly-web:latest
     ports:
-      - 8080:8080
+      - 80:8080
     <<: *deploy
+
   api:
     depends_on: 
       - db
     build:
       context: ./api
       target: production
-    image: vidly-api:production
+    image: ammarshah/vidly-api:latest
     ports:
       - 3001:3001
     environment:
       DB_URL: mongodb://db/vidly
     <<: *deploy
+
   db:
     image: mongo:6.0.13-jammy
     ports:

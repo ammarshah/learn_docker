@@ -8,6 +8,20 @@ services:
     image: vidly-web:development
     ports:
       - 3000:3000
+    develop:
+      watch:
+        - action: sync
+          path: ./web
+          target: /app
+          ignore:
+            - ./web/node_modules/
+        - action: rebuild
+          path: ./web/package.json
+        - action: rebuild
+          path: ./web/Dockerfile
+        - action: rebuild
+          path: compose.dev.yml
+
   api:
     depends_on: 
       - db
@@ -19,6 +33,22 @@ services:
       - 3001:3001
     environment:
       DB_URL: mongodb://db/vidly
+    develop:
+      watch:
+        - action: sync
+          path: ./api
+          target: /app
+          ignore:
+            - ./api/node_modules/
+        - action: rebuild
+          path: ./api/package.json
+        - action: rebuild
+          path: ./api/Dockerfile
+        - action: rebuild
+          path: ./api/migrations/
+        - action: rebuild
+          path: compose.dev.yml
+
   db:
     image: mongo:6.0.13-jammy
     ports:
